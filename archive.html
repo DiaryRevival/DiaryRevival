@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search Old Diaries and Notebooks &mdash; Diary Revival</title>
+<meta name="description" content="Browse and search old diaries and notebooks by occupation, place, decade or tag. Every entry is transcribed from a real book and free to read.">
+<meta property="og:site_name" content="Diary Revival">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Search Old Diaries and Notebooks &mdash; Diary Revival">
+<meta property="og:description" content="Browse and search old diaries and notebooks by occupation, place, decade or tag. Every entry is transcribed from a real book and free to read.">
+<meta property="og:url" content="https://diaryrevival.com/archive.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://diaryrevival.com/archive.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="stylesheet" href="css/style.css?v=13">
+<script src="js/entries.js?v=13"></script>
+<script src="js/site.js?v=13"></script>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <p class="kicker">Est. 2026 &middot; A non-profit archive of private writing</p>
+  <h1><a href="index.html">Diary Revival</a></h1>
+  <p class="tagline">Lost voices, written by hand, read again.</p>
+</header>
+<nav class="menu" aria-label="Main">
+  <a href="index.html">Home</a><span class="sep">|</span>
+  <a href="archive.html" aria-current="page">The Archive</a><span class="sep">|</span>
+  <a href="about.html">About</a>
+  <button type="button" class="theme-toggle">[ dark mode ]</button>
+</nav>
+
+<main id="archive">
+  <h2>The Archive</h2>
+  <p>
+    Each entry here belongs to one person and includes everything they wrote in that book. Search for
+    the kind of person you want to read about (job, place, decade) and narrow it down with tags.
+  </p>
+
+  <div class="box">
+    <div class="controls">
+      <div class="wide">
+        <label>Show</label>
+        <div class="tags" id="kind-switch">
+          <button type="button" class="tag" data-kind="all" aria-pressed="true">all</button>
+          <button type="button" class="tag" data-kind="diary" aria-pressed="false">diary</button>
+          <button type="button" class="tag" data-kind="notebook" aria-pressed="false">notebook</button>
+        </div>
+      </div>
+      <div class="wide">
+        <label for="q">Search the writers</label>
+        <input type="search" id="q" placeholder="e.g. housewife, miner, Yorkshire, 1940s&hellip;" autocomplete="off">
+        <label class="check"><input type="checkbox" id="inside"> also search inside the pages (words they wrote)</label>
+      </div>
+      <div class="filter-toggle">
+        <button type="button" class="tag" id="filter-toggle" aria-expanded="false">more filters</button>
+      </div>
+      <div class="filter-extra">
+        <label for="decade">Decade</label>
+        <select id="decade"><option value="">Any decade</option></select>
+      </div>
+      <div class="filter-extra">
+        <label for="occupation">Occupation</label>
+        <select id="occupation"><option value="">Anyone</option></select>
+      </div>
+      <div class="filter-extra">
+        <label for="sort">Order by</label>
+        <select id="sort">
+          <option value="oldest">Oldest first</option>
+          <option value="newest">Newest first</option>
+          <option value="added">Recently added</option>
+          <option value="title">Title A&ndash;Z</option>
+        </select>
+      </div>
+      <div class="wide filter-extra">
+        <label>Tags</label>
+        <div class="tags" id="tag-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="result-count"><span id="result-count"></span> &middot; <button type="button" class="clear-btn" id="clear">clear all</button></p>
+  <ol class="entries" id="results"></ol>
+</main>
+
+<footer>
+  <div class="badges" aria-label="Site promises">
+    <span class="badge"><b>No ads</b>ever</span>
+    <span class="badge"><b>No trackers</b>no cookies</span>
+    <span class="badge"><b>Hand</b>written</span>
+  </div>
+  <p>Diary Revival &middot; non-profit &middot; made with plain HTML</p>
+  <p>Contact: <span data-email>email address coming soon</span></p>
+</footer>
+
+</div>
+</body>
+</html>
