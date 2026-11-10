@@ -454,7 +454,7 @@ window.DIARIES = [
         text: "Sunday 8th January\nRead \"The Vanity Box\" By Mrs C. N. Williamson.\n\nMonday 9th January\nA most ordinary day no events.\n\nTuesday 10th January\nOn the trail of the West Bromwich murder or suicide. Jack came about tickets.\nBeastly headache!\n\nWednesday 11th January\nMeeting E de M" },
       { date: "1928-01-12", heading: "12 to 14 January",
         photo: { src: "img/pocket-diary-1928/page-04.jpg" },
-        text: "Thursday 12th January\nStayed at home during the evening\n\nFriday 13th January\nMrs B. came to see Mother.\n\nSaturday 14th January\nBought 2 dress pieces Brown & grey.\n\nMemo\n10th. Found to be suicide Financial Difficulties" },
+        text: "Thursday 12th January\nStayed at home during the evening\n\nFriday 13th January\nMrs B. came to see Mother.\n\nSaturday 14th January\nBought 2 dress pieces Brown & grey.\n\nMemo\n10th. Found to be suicide Financial Difficulties\n{{This follows up the 10 January entry about a death in West Bromwich.}}" },
       { date: "1928-01-15", heading: "15 to 18 January",
         photo: { src: "img/pocket-diary-1928/page-05.jpg" },
         text: "Sunday 15th January\nAuntie Cecilia came great surprise, said she would send Vincent.\n\nMonday 16th January\nWork as usual. Went to Women's Social in Guildhall.\n\nTuesday 17th January\nDid not go out - stayed at home - too tired.\n\nWednesday 18th January\nE.de.M. one of the best nights I have had. Great fun." },
