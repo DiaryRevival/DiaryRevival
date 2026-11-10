@@ -19,7 +19,7 @@ window.DIARIES = [
       { src: "", caption: "A page." },
       { src: "", caption: "A close-up." },
     ],
-    tags: ["second world war", "air raid precautions", "london", "gas", "first aid"],
+    tags: ["second world war", "air raid precautions", "london", "first aid"],
     summary:
       "A small red notebook from the start of the Second World War. Its owner listed the households on one London street, each with their National Registration number, and filled the rest with notes on poison gases: what each one smells like, what it does to the body and how to help the injured.",
     // Names, initials, streets and house numbers have been changed. Registration numbers and the area name are removed.
@@ -322,7 +322,7 @@ window.DIARIES = [
       { src: "", caption: "A page." },
       { src: "", caption: "A close-up." },
     ],
-    tags: ["india", "childhood", "stamps", "travel"],
+    tags: ["india", "childhood", "stamps"],
     summary:
       "A father’s record of his son’s first years, begun in India in 1947. It notes the news on the day the boy was born, his first smile and first steps, his childhood illnesses, and a page of stamps from every country the family passed through when they left India in 1952.",
     // Selected pages only; page numbers are the book's own. The boy's name is changed and places and some dates are removed. Family pages, travel lists and everything after 1956 are left out.
@@ -438,7 +438,7 @@ window.DIARIES = [
       { src: "", caption: "A page." },
       { src: "", caption: "A close-up." },
     ],
-    tags: ["black country", "office work", "catholic life", "lourdes", "family", "wages"],
+    tags: ["black country", "office work", "catholic life", "lourdes", "family"],
     summary:
       "A year in a small pencil-written pocket diary, kept by a young Catholic woman who lived with her parents and worked in an office. She notes her pay days, her sewing and knitting, whist drives, church lectures and trips to the theatre, a pilgrimage to Lourdes in May, her brother’s operation in the autumn and the King’s illness in December.",
     // Selected pages only, one block per page of the book. Every name and set of initials has been changed, and covered on the photos. Towns are real. Birthdays and a few numbers are removed.
