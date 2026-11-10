@@ -399,6 +399,32 @@ table.facts th {
 }
 .day p { margin: 0; white-space: pre-line; }
 
+/* A day with its page photo: photo on the left, transcription on the right. */
+.day.has-photo { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 20px; align-items: start; }
+.page-photo {
+  padding: 0;
+  border: 1px solid var(--ink);
+  background: var(--box);
+  box-shadow: 3px 3px 0 var(--rule);
+  cursor: zoom-in;
+}
+.page-photo img { display: block; width: 100%; height: auto; }
+.page-photo.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 4;
+  border: 2px dashed var(--rule);
+  box-shadow: none;
+  cursor: default;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.page-photo:hover, .page-photo:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
 .note {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 14px;
@@ -446,6 +472,69 @@ footer {
 
 .filter-toggle { display: none; }
 
+/* ---------- Photos of the book ---------- */
+
+.photo-thumb {
+  flex: 0 0 120px;
+  position: relative;
+  padding: 0;
+  border: 1px solid var(--ink);
+  background: var(--box);
+  box-shadow: 3px 3px 0 var(--rule);
+  cursor: zoom-in;
+}
+.photo-thumb img { display: block; width: 120px; height: 160px; object-fit: cover; }
+.photo-thumb .photo-count {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 2px 0;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.photo-thumb:hover, .photo-thumb:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+dialog.lightbox {
+  width: min(900px, 100vw - 32px);
+  max-height: calc(100vh - 32px);
+  padding: 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+dialog.lightbox::backdrop { background: rgba(0, 0, 0, 0.8); }
+.lightbox-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+}
+dialog.lightbox figure { margin: 0; }
+.lightbox-stage { position: relative; display: flex; justify-content: center; background: #111; }
+.lightbox-stage img { display: block; width: auto; max-width: 100%; height: calc(100vh - 170px); max-height: 800px; object-fit: contain; }
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 64px;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 36px;
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-arrow.prev { left: 6px; }
+.lightbox-arrow.next { right: 6px; }
+.lightbox-arrow:hover, .lightbox-arrow:focus-visible { background: rgba(0, 0, 0, 0.85); }
+dialog.lightbox figcaption { margin-top: 8px; font-style: italic; text-align: center; }
+
 @media (max-width: 600px) {
   body { font-size: 16px; }
   .controls { grid-template-columns: 1fr; }
@@ -458,11 +547,14 @@ footer {
   .filter-toggle { display: block; }
   .entry-head { flex-direction: column; gap: 16px; }
   .book-cover { flex-basis: auto; width: 104px; }
+  .day.has-photo { grid-template-columns: 1fr; gap: 12px; }
+  .page-photo { max-width: 320px; }
+  .photo-thumb { flex-basis: auto; width: 122px; }
   .controls:not(.show-filters) .filter-extra { display: none; }
 }
 
 @media print {
-  nav.menu, .theme-toggle, footer .badges { display: none; }
+  nav.menu, .theme-toggle, footer .badges, .photo-count { display: none; }
   body { background: #fff; color: #000; }
 }
 

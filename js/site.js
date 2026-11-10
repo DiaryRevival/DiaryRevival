@@ -69,7 +69,7 @@ function esc(s) {
 // Diary text -> HTML for the page (transcriber's notes).
 function textToHtml(text) {
   return esc(text)
-    .replace(/\{\{(.+?)\}\}/g, '<span class="note">[Transcriber: $1]</span>');
+    .replace(/\{\{(.+?)\}\}/g, '<span class="note">[$1]</span>');
 }
 
 // Diary text -> plain text for searching.
@@ -320,6 +320,74 @@ function bookCover(d) {
   return '<div class="book-cover" style="background-color:' + colour + '" aria-hidden="true"><span>' + label + "</span></div>";
 }
 
+// Photos of the real book. The first one (normally the cover) shows on the
+// entry page; clicking it opens a viewer to slide through them all.
+function photoThumb(photos, title) {
+  var p = photos[0];
+  var n = photos.length;
+  return '<button type="button" class="photo-thumb" id="open-photos" aria-label="Look at the photos of this book (' + n + ')">' +
+    '<img src="' + esc(p.src) + '" alt="' + esc(p.alt || p.caption || title) + '">' +
+    '<span class="photo-count">' + n + (n === 1 ? " photo" : " photos") + "</span></button>";
+}
+
+// Opens the photo viewer. returnTo is the button to put focus back on after.
+function openPhotos(title, photos, start, returnTo) {
+  var i = start || 0;
+  var dlg = document.createElement("dialog");
+  dlg.className = "lightbox";
+  dlg.setAttribute("aria-label", "Photos of " + title);
+  dlg.innerHTML =
+    '<div class="lightbox-bar"><span class="lightbox-count"></span>' +
+    '<button type="button" class="btn lightbox-close">Close &times;</button></div>' +
+    '<figure><div class="lightbox-stage">' +
+    '<button type="button" class="lightbox-arrow prev" aria-label="Previous photo">&lsaquo;</button>' +
+    '<img alt="">' +
+    '<button type="button" class="lightbox-arrow next" aria-label="Next photo">&rsaquo;</button>' +
+    "</div><figcaption></figcaption></figure>";
+  document.body.appendChild(dlg);
+
+  var img = dlg.querySelector("img");
+  function show(n) {
+    i = (n + photos.length) % photos.length;
+    var p = photos[i];
+    img.src = p.src;
+    img.alt = p.alt || p.caption || "";
+    dlg.querySelector("figcaption").textContent = p.caption || "";
+    dlg.querySelector(".lightbox-count").textContent = "Photo " + (i + 1) + " of " + photos.length;
+  }
+  var single = photos.length < 2;
+  dlg.querySelectorAll(".lightbox-arrow").forEach(function (b) { b.hidden = single; });
+  dlg.querySelector(".prev").addEventListener("click", function () { show(i - 1); });
+  dlg.querySelector(".next").addEventListener("click", function () { show(i + 1); });
+  function finish() {
+    if (!dlg.isConnected) return;
+    if (dlg.open) dlg.close();
+    dlg.remove();
+    if (returnTo) returnTo.focus();
+  }
+  dlg.querySelector(".lightbox-close").addEventListener("click", finish);
+  // Click the dark area around the photo to close.
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) finish(); });
+  dlg.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") show(i - 1);
+    if (e.key === "ArrowRight") show(i + 1);
+  });
+  // Swipe left or right on a phone.
+  var x0 = null;
+  img.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  img.addEventListener("touchend", function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+  dlg.addEventListener("close", finish); // Esc key
+
+  show(i);
+  dlg.showModal();
+  dlg.querySelector(single ? ".lightbox-close" : ".next").focus();
+}
+
 // The "Context of the time" drop-down. Only shows if the entry has context.
 function contextBox(d) {
   if (!d.context) return "";
@@ -347,10 +415,44 @@ function initEntry() {
   canonical.rel = "canonical";
   canonical.href = SITE.url + "/entry.html?id=" + encodeURIComponent(d.id);
   document.head.appendChild(canonical);
+  // Share previews (Facebook, X, messaging apps) use the entry's own title and summary.
+  function setOg(prop, value) {
+    var tag = document.querySelector('meta[property="' + prop + '"]');
+    if (!tag) { tag = document.createElement("meta"); tag.setAttribute("property", prop); document.head.appendChild(tag); }
+    tag.content = value;
+  }
+  setOg("og:title", d.title);
+  setOg("og:description", d.summary);
+  setOg("og:url", canonical.href);
+  setOg("og:type", "article");
+  // Structured data so search engines know this is a transcribed manuscript.
+  var ld = document.createElement("script");
+  ld.type = "application/ld+json";
+  ld.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": d.title,
+    "description": d.summary,
+    "url": canonical.href,
+    "inLanguage": "en-GB",
+    "dateCreated": String(d.year),
+    "keywords": (d.tags || []).join(", "),
+    "isPartOf": { "@type": "WebSite", "name": SITE.name, "url": SITE.url + "/" }
+  });
+  document.head.appendChild(ld);
   if (d.placeholder) keepOutOfSearch();
+  // A photo with an empty src is a slot waiting to be filled: it is skipped
+  // in the viewer, and on a page it shows as an empty frame.
+  var coverPhotos = (d.photos || []).filter(function (p) { return p && p.src; });
+  var hasPhotos = coverPhotos.length > 0;
+  // Page photos, in page order, so the viewer can slide from one page to the next.
+  var pagePhotos = d.days.map(function (x) {
+    if (x.photo && !x.photo.caption) x.photo.caption = x.heading;
+    return x.photo && x.photo.src ? x.photo : null;
+  }).filter(Boolean);
 
   box.innerHTML =
-    '<div class="entry-head">' + bookCover(d) + "<div>" +
+    '<div class="entry-head">' + (hasPhotos ? photoThumb(coverPhotos, d.title) : bookCover(d)) + "<div>" +
     "<h2>" + esc(d.title) + (d.placeholder ? ' <span class="stamp">placeholder</span>' : "") + "</h2>" +
     "<p><em>" + esc(d.summary) + "</em></p>" +
     "</div></div>" +
@@ -367,11 +469,30 @@ function initEntry() {
     d.days.map(function (x, i) {
       var month = monthOf(x);
       var first = month && (i === 0 || monthOf(d.days[i - 1]) !== month);
-      return '<div class="day"' + (first ? ' id="month-' + month + '"' : "") + "><h3>" + esc(x.heading) + "</h3><p>" + textToHtml(x.text) + "</p></div>";
+      var text = "<h3>" + esc(x.heading) + "</h3><p>" + textToHtml(x.text) + "</p>";
+      if (x.photo && !x.photo.src) {
+        text = '<div class="page-photo empty" aria-hidden="true"><span>Photo to come</span></div>' +
+          '<div class="day-text">' + text + "</div>";
+      } else if (x.photo) {
+        // The photo of this page, side by side with its transcription.
+        text = '<button type="button" class="page-photo" data-page="' + pagePhotos.indexOf(x.photo) + '" aria-label="Look closer at the photo of ' + esc(x.heading) + '">' +
+          '<img src="' + esc(x.photo.src) + '" alt="' + esc(x.photo.alt || "Photo of the page for " + x.heading) + '" loading="lazy"></button>' +
+          '<div class="day-text">' + text + "</div>";
+      }
+      return '<div class="day' + (x.photo ? " has-photo" : "") + '"' + (first ? ' id="month-' + month + '"' : "") + ">" + text + "</div>";
     }).join("") +
     "</div>" +
-    '<p class="small">Names, places and dates may have been changed to protect the people in the book. Notes marked “Transcriber” are mine, not the writer’s. Spelling and punctuation are kept as written.</p>' +
+    '<p class="small">Names, places and dates may have been changed to protect the people in the book. Spelling and punctuation are kept as written.</p>' +
     '<p><a href="archive.html">&larr; Back to the archive</a></p>';
+
+  if (hasPhotos) {
+    var thumb = document.getElementById("open-photos");
+    thumb.addEventListener("click", function () { openPhotos(d.title, coverPhotos, 0, thumb); });
+  }
+
+  box.querySelectorAll(".page-photo").forEach(function (b) {
+    b.addEventListener("click", function () { openPhotos(d.title, pagePhotos, Number(b.dataset.page), b); });
+  });
 
   function row(k, v) { return v ? "<tr><th>" + esc(k) + "</th><td>" + esc(v) + "</td></tr>" : ""; }
 }
