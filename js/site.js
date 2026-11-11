@@ -130,7 +130,7 @@ function entryListItem(d, query, fromPages) {
   return (
     "<li>" +
     '<div class="meta">' + esc(d.covers) + " &middot; " + esc(d.occupation) + " &middot; " + esc(d.region) +
-    (d.placeholder ? ' &middot; <span class="stamp">placeholder</span>' : "") + "</div>" +
+    (d.placeholder ? ' &middot; <span class="stamp">placeholder</span>' : "") + (d.held === "me" ? ' &middot; <span class="collection-tag">In my collection</span>' : "") + "</div>" +
     '<div class="title"><a href="entry.html?id=' + encodeURIComponent(d.id) + '">' + esc(d.title) + "</a></div>" +
     '<p class="snippet">' + snip + "</p>" +
     '<div class="tags">' + d.tags.map(function (t) { return tagLink(t, d); }).join("") + "</div>" +
@@ -454,13 +454,14 @@ function initEntry() {
   box.innerHTML =
     '<div class="entry-head">' + (hasPhotos ? photoThumb(coverPhotos, d.title) : bookCover(d)) + "<div>" +
     "<h2>" + esc(d.title) + (d.placeholder ? ' <span class="stamp">placeholder</span>' : "") + "</h2>" +
+    (d.held === "me" ? '<p class="collection-line"><span class="collection-tag">In my collection</span></p>' : "") +
     "<p><em>" + esc(d.summary) + "</em></p>" +
     "</div></div>" +
     '<details class="box context"><summary>About this book</summary>' +
     '<table class="facts"><tbody>' +
     row("Written by", d.writer) + row("Covers", d.covers) + row("Occupation", d.occupation) +
     row("Region", d.region) + row("The book", d.format) + row("Condition", d.condition) +
-    row("Where it came from", d.acquired) + row("Added to the archive", d.added) +
+    row("Where it came from", d.acquired) + row("Where the book is", d.held === "me" ? "In my collection" : d.held === "owner" ? "Kept by its owner" : "") + row("Added to the archive", d.added) +
     "</tbody></table></details>" +
     contextBox(d) +
     '<div class="tags">' + d.tags.map(function (t) { return tagLink(t, d); }).join("") + "</div>" +

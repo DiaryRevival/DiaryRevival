@@ -1,6 +1,7 @@
 window.DIARIES = [
   {
     id: "air-raid-warden-notebook-1939",
+    held: "me",
     kind: "notebook",
     title: "Air Raid Warden’s Notebook, 1939",
     writer: "An air raid warden in north-west London",
@@ -106,6 +107,7 @@ window.DIARIES = [
   },
   {
     id: "speakers-notebook-1925",
+    held: "me",
     kind: "notebook",
     title: "A Speaker’s Notebook, 1925 to 1937",
     writer: "A Conservative Party volunteer in London",
@@ -305,6 +307,7 @@ window.DIARIES = [
   },
   {
     id: "hamish-baby-book-1947",
+    held: "me",
     title: "Hamish’s Baby Book, 1947 to 1956",
     writer: "A father, for his son",
     cover: "#561c1c",
@@ -421,6 +424,7 @@ window.DIARIES = [
   },
   {
     id: "pocket-diary-1928",
+    held: "me",
     title: "An Office Worker’s Pocket Diary, 1928",
     writer: "A young woman working in an office in the Black Country",
     cover: "#1f1d1c",

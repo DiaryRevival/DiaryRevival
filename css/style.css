@@ -561,3 +561,12 @@ dialog.lightbox figcaption { margin-top: 8px; font-style: italic; text-align: ce
 
 ol.rules { padding-left: 24px; }
 ol.rules li { margin: 8px 0; }
+
+/* "In my collection" tag: books I physically own (entries with held: "me") */
+.collection-tag {
+  display: inline-block; padding: 0 6px; border: 1px solid var(--rule); border-radius: 2px;
+  background: var(--paper-2); color: var(--ink-soft);
+  font-size: 0.72em; letter-spacing: 0.05em; text-transform: uppercase;
+  font-style: normal; white-space: nowrap; vertical-align: middle;
+}
+.collection-line { margin: 0.2em 0 0.6em; }
